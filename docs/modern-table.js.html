@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ModernTable Docs</title>
+
+    
+    
+    
+    
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <!-- <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css"> -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link type="text/css" rel="stylesheet" href="styles/main.css">
+
+</head>
+
+<body class="body-grid-container">
+
+<nav class="sidenav-container px-2" id="sidenav">
+    <h2><a href="index.html">ModernTable Docs</a></h2><h3>Classes</h3><ul><li><a href="HTTPError.html">HTTPError</a></li><li><a href="JSONSyntaxError.html">JSONSyntaxError</a></li><li><a href="ModernTable.html">ModernTable</a></li><li><a href="TableErrorHandler.html">TableErrorHandler</a></li></ul>
+</nav>
+
+<main id="main" class="main-container ml-3 mr-5">
+
+    <h1 class="page-title">Source: modern-table.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * ModernTable Library
+ * Library for displaying a data table from a JSON source.
+ * @author SimpleNotSimpler
+ * @version 1.0.0
+ * @license MIT
+ *                                                                                                
+ * @requires modern-table.css {@link modern-table.css}
+ * @requires format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
+ * @requires Moment.js {@link https://momentjs.com/}
+ * 
+ */
+
+
+
+/**
+ *
+ * @class ModernTable
+ * @classdesc A simple ES6 class targeting modern browsers that dynamically creates a data table from a JSON source. Displays nicely within Bootstrap Card.
+ * &lt;ul>NOTES:
+ *    &lt;li>Underscores (_) used to indicate private (local) methods that should not be used outside of the class.&lt;/li>
+ *    &lt;li>tableFooter can affect the width of the first column.&lt;/li>
+ *    &lt;li>Date format requires &lt;a href="https://momentjs.com/">Moment.js&lt;/a>.
+ *    &lt;li>Number formats depend on &lt;a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number&lt;/a> library.
+ * &lt;/ul>
+ * @param {string} tableContainerID The ID of the element that contains the table.
+ * @param {string} tableID The ID we want to assign to the table.
+ * @param {string} dataURL URL used to fetch JSON data to build table.
+ * @param {Object} [options] Optional configuration object.
+ * @param {string} [options.tableClasses] Enter classes as a single string same as if entering in the class attribute.
+ * @param {string} [options.tableCaption] String for specifying table caption.
+ * @param {string} [options.tableFooter] String for specifying table footer.
+ * @param {boolean} [options.enableSearch=true] - boolean to enable using the search box.
+ * @param {string} [options.searchClasses] Classes to be used on the search element.
+ * @param {Object} [options.colConfig] Column configuration object. Key is column name.
+ * @param {string} [options.colConfig.colName] The name of the column in the model to set options for. 
+ * @param {string} [options.colConfig.colName.format] Column format: 'date-us', 'number-grouped', 'number-ungrouped', 'currency-us', 'percent'. 
+ * @param {string} [options.colConfig.colName.dateSource] Date format of source data.
+ * @param {string} [options.colConfig.colName.dateDisplay] Format that the date should be displayed in.
+ * @param {number} [options.colConfig.colName.numDecimals=0] Number of decimals to display. 
+ * @param {string} [options.colConfig.colName.alignment] Cell alignment: left, center, and right.
+ * 
+ */
+class ModernTable {
+
+    constructor(
+        //required parameters
+        tableContainerID = '',
+        tableID = '',
+        dataURL = '',
+
+        //optional parameters via config object
+        {
+            tableClasses = '',
+            tableCaption = '',
+            tableFooter = '',
+            enableSearch = true,
+            searchClasses = '',
+            colConfig = {}
+        } = {}
+    ) {
+
+        this.tableContainer = document.getElementById(`${tableContainerID}`);
+        this.tableID = tableID;
+        this.dataURL = dataURL;
+        this.tableClasses = tableClasses;
+        this.tableCaption = tableCaption;
+        this.tableFooter = tableFooter;
+        this.enableSearch = enableSearch;
+        this.searchClasses = searchClasses;
+        //because using async functions with fetching data, this is a globabl variable rather than being passed
+        this.colConfig = colConfig;
+        this.defaultAlignment = 'left';
+
+
+        //call last
+        this._buildTable();
+
+    }
+
+    /**
+     * @summary Builds the table by fetching the data &amp; rendering the table in the GUI.
+     * @private
+     * @memberof ModernTable
+     */
+    async _buildTable() {
+        const data = await this._fetchData(this.dataURL);
+        this._renderTable(data);
+    }
+
+    /**
+     * @summary Fetches data and renders table if data was successfully fetched
+     * @private
+     * @param {string} urlToBeFetched
+     * @returns {Object[]} responseJSON
+     * @memberof ModernTable
+     */
+
+    async _fetchData(urlToBeFetched) {
+
+        try {
+            const response = await fetch(urlToBeFetched);
+
+            if (response.ok) {
+
+                //check for content type per:
+                // https://stackoverflow.com/questions/37121301/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript
+                //  answered May 9 '16 at 17:02 nils
+
+                const responseContentType = response.headers.get("content-type");
+
+                if (responseContentType &amp;&amp; responseContentType.indexOf("application/json") !== -1) {
+                    const responseJSON = await response.json();
+                    return responseJSON;
+                } else {
+                    throw new JSONSyntaxError(`&lt;br>&lt;strong>Data URL:&lt;/strong> ${urlToBeFetched}`);
+                }
+            } else {
+                throw new HTTPError(`${response.status} ${response.statusText} &lt;br>&lt;strong>Data URL:&lt;/strong> ${urlToBeFetched}`);
+            }
+        } catch (error) {
+            const tblErrorHandler = new TableErrorHandler(error);
+        }
+
+    }
+
+    /**
+     * @private
+     * @param {Object[]} tableData
+     * @memberof ModernTable
+     */
+
+    _renderTable(tableData) {
+
+        const table = document.createElement('table');
+
+        //note: order is critical. table body must be rendered FIRST !!!
+        // otherwise everything is rendered in the head
+        this._renderTableBody(table, tableData);
+        this._renderTableHead(table, tableData);
+
+        if (this.tableCaption) {
+            table.createCaption().innerText = this.tableCaption;
+        }
+
+        if (this.tableFooter) {
+            table.createTFoot().innerText = this.tableFooter;
+        }
+
+        table.className = this.tableClasses;
+
+        table.id = this.tableID;
+
+        //add table almost last
+        this.tableContainer.insertAdjacentElement('afterbegin', table);
+
+        if (this.enableSearch) {
+            this._renderTableSearch(table);
+        }
+    }
+
+    /**
+     *
+     * @private
+     * @param {Object} elementTable
+     * @memberof ModernTable
+     */
+    _renderTableSearch(elementTable) {
+        const tableSearchBox = document.createElement('input');
+
+        tableSearchBox.className = this.searchClasses;
+        tableSearchBox.setAttribute('type', 'search');
+        tableSearchBox.setAttribute('placeholder', 'Search');
+        tableSearchBox.setAttribute('aria-label', 'Search');
+        tableSearchBox.setAttribute('size', '50');
+
+        elementTable.insertAdjacentElement('beforebegin', tableSearchBox);
+
+        tableSearchBox.addEventListener('keyup', (e) => {
+
+            this._cancelSearch(e);
+
+            this._filterTable(e, elementTable.rows);
+        });
+    }
+
+    /**
+     * @summary Provides a method for canceling a search
+     * @private
+     * @param {event} e
+     * @memberof ModernTable
+     */
+    _cancelSearch(e) {
+        /* ESC = 27, CTRL+Z / CMD+Z = 90
+        http://keycodes.atjayjo.com/#charcode */
+        if (e.keyCode === 27 || e.keyCode === 90) {
+            e.target.value = '';
+        }
+    }
+
+    /**
+     * @summary Loops through each cell in each row and checks if matches searchText.
+     * @private
+     * @param {event} e
+     * @param {array} rows - rows collection of a table element
+     * @memberof ModernTable
+     */
+
+    _filterTable(e, rows) {
+        const searchText = e.target.value.toLowerCase();
+        let isMatch = true;
+
+        // Accessing Table cells collection via the row
+        // https://www.w3schools.com/jsref/coll_table_cells.asp
+        // Keep names generic. Otherwise, renaming can break code
+        // e.g. tableRow.tableCells doesn't work.
+        for (let row of rows) {
+            for (let cell of row.cells) {
+                if (cell.textContent.toLowerCase().indexOf(searchText) > -1) {
+                    isMatch = true;
+                }
+            }
+
+            if (isMatch) {
+                row.style.display = '';
+                isMatch = false;
+            } else {
+                row.style.display = 'none';
+            }
+
+        }
+    }
+
+    /**
+     *
+     * @private
+     * @param {string} elementTable
+     * @param {Object} tableData
+     * @memberof ModernTable
+     */
+    _renderTableBody(elementTable, tableData) {
+
+        const dataRows = tableData;
+
+        for (let dataRow of dataRows) {
+
+            let tableRow = elementTable.insertRow();
+            let tableCell;
+
+            //switched to using entries so that can more easily check the key for formatting
+            const dataCells = Object.entries(dataRow);
+
+            for (let [dataKey, dataCell] of dataCells) {
+
+                let alignment = this.defaultAlignment;
+                let alignmentClass;
+
+                tableCell = tableRow.insertCell();
+
+
+                //from https://dmitripavlutin.com/7-tips-to-handle-undefined-in-javascript/
+                // section 2.2 Tip # 3
+
+                //check that colConfig was set before call stuff
+                if (this.colConfig) {
+                    if (dataKey in this.colConfig) {
+
+                        // format table cell
+                        dataCell = this._formatCellValue(dataCell, dataKey);
+
+                        alignment = this._setAlignment(dataKey);
+                    }
+                }
+
+                alignmentClass = `align-text-${alignment}`;
+
+
+                tableCell.innerText = dataCell;
+                tableCell.classList.add(alignmentClass);
+            }
+        }
+    }
+
+    /**
+     *
+     * @private
+     * @param {string} elementTable
+     * @param {Object[]} tableData
+     * @memberof ModernTable
+     */
+    _renderTableHead(elementTable, tableData) {
+
+        const firstRow = tableData[0];
+        const colHeaders = Object.keys(firstRow);
+
+        let alignment = this.defaultAlignment;
+        let alignmentClass;
+        let colHeader;
+        let tableTH;
+
+        let tableHead = elementTable.createTHead();
+        let tableHeadRow = tableHead.insertRow();
+
+
+        for (colHeader of colHeaders) {
+
+            //have to set the colTitle to colHeader so have a default for later
+            let colTitle = colHeader;
+
+            if (this.colConfig) {
+
+                if (colHeader in this.colConfig) {
+
+                    //set column title if it had been configured manually 
+                    colTitle = this._setColTitle(colHeader);
+
+                    //set alignment for table header cell
+                    alignment = this._setAlignment(colHeader);
+
+                }
+            }
+
+            //often when get data from databases, columns will have underscores to separate words
+            colTitle = colTitle.replace('_', ' ');
+
+            //create table element, set text &amp; scope (for screen readers)
+            tableTH = document.createElement('th');
+            tableTH.innerText = colTitle;
+            tableTH.setAttribute('scope', 'col');
+
+            // https://css-tricks.com/almanac/properties/t/text-transform/
+            // https://codepen.io/mariemosley/pen/0f4293fce0d14aafc3818c950ab0ded3
+            // best practice is to use classList.add
+            tableTH.classList.add('capitalize');
+
+            alignmentClass = `align-text-${alignment}`;
+            tableTH.classList.add(alignmentClass);
+
+            //before end position === appendChild location
+            tableHeadRow.insertAdjacentElement('beforeend', tableTH);
+        }
+    }
+
+    /**
+     *
+     * @private
+     * @param {string} configKey
+     * @returns {string} colTitle
+     * @memberof ModernTable
+     */
+    _setColTitle(configKey) {
+
+        let colTitle = configKey;
+
+        let currentColConfig = this.colConfig[configKey];
+
+        if ('colTitle' in currentColConfig) {
+            colTitle = currentColConfig['colTitle'];
+        }
+
+        return colTitle;
+
+    }
+
+
+    /**
+     * @private
+     * @param {string} configKey
+     * @returns {string} alignment
+     * @memberof ModernTable
+     */
+    _setAlignment(configKey) {
+
+        let alignment;
+        let currentColConfig = this.colConfig[configKey];
+
+        if ('alignment' in currentColConfig) {
+            alignment = currentColConfig['alignment'];
+        } else {
+            alignment = this.defaultAlignment;
+        }
+
+        return alignment;
+    }
+    /**
+     * @private
+     * @param {*} cellValue
+     * @param {string} configKey
+     * @returns cellValue
+     * @memberof ModernTable
+     */
+    _formatCellValue(cellValue, configKey) {
+
+        let currentColConfig = this.colConfig[configKey];
+        let currentColFormat = currentColConfig['format'];
+
+
+        if (currentColFormat !== 'date-us') {
+            if ('numDecimals' in currentColConfig) {
+                let numDecimals = currentColConfig['numDecimals'];
+
+                cellValue = formatIntlNumber(cellValue, currentColFormat, numDecimals);
+            } else {
+                cellValue = formatIntlNumber(cellValue, currentColFormat);
+            }
+        } else if (currentColFormat === 'date-us') {
+            let dateFrom = currentColConfig['dateFrom'];
+            let dateTo = currentColConfig['dateTo'];
+
+            //strict mode recommended per https://momentjs.com/guides/#/parsing/strict-mode/
+            cellValue = moment(cellValue, dateFrom, true).format(dateTo);
+
+        }
+
+        return cellValue;
+
+    }
+
+}
+
+/**
+ *
+ * @class TableErrorHandler 
+ * @summary Processes an error into a user friendly version displayed in the gui. 
+ * @param {Object} error
+ */
+class TableErrorHandler {
+    constructor(error) {
+        this.tableContainer = document.getElementById('table-container');
+        this.tableErrorContainer = document.createElement('section');
+        this.tableErrorContainerHeader = document.createElement('h1');
+        this.tableErrorContainerBody = document.createElement('div');
+
+
+        this.tableContainer.insertAdjacentElement('beforebegin', this.tableErrorContainer);
+        this.tableErrorContainer.insertAdjacentElement('afterbegin', this.tableErrorContainerHeader);
+        this.tableErrorContainer.insertAdjacentElement('beforeend', this.tableErrorContainerBody);
+
+        this.tableErrorContainer.className = 'table-error';
+
+        this.tableErrorContainerHeader.innerHTML = `Error Displaying Table`;
+
+        //this splits error stack into clean separate lines. makes so all have proper indent.
+        // from https://stackoverflow.com/questions/784539/how-do-i-replace-all-line-breaks-in-a-string-with-br-tags
+        //  answered Apr 24 '09 at 4:43 eyelidlessness
+        const prettyErrorStack = error.stack.replace(/(?:\r\n|\r|\n)/g, '&lt;br>');
+
+        this.tableErrorContainerBody.innerHTML = `
+   
+    &lt;h2>Our apologies. Please contact your system administrator with these details:&lt;/h2>
+    &lt;section class="table-error-details">
+    &lt;p>&lt;strong>${error.name}&lt;/strong>: ${error.message}&lt;/p>
+    &lt;p>&lt;strong>Stack trace:&lt;/strong>&lt;/p>
+    &lt;p class="table-error-details">${prettyErrorStack}&lt;/p>
+    &lt;/section>
+    `;
+
+
+    }
+}
+
+/**
+ *
+ * @class HTTPError
+ * @summary Custom errror for processing HTTP errors.
+ * @extends {Error}
+ */
+class HTTPError extends Error {
+
+    constructor(message) {
+        super(message);
+        this.name = 'HTTPError';
+    }
+}
+
+/**
+ *
+ * @class JSONSyntaxError
+ * @summary Custom error for JSON Syntax errors. Passes the stack trace.
+ * @extends {SyntaxError}
+ */
+class JSONSyntaxError extends SyntaxError {
+    constructor(message) {
+        super(message);
+        this.name = 'JSONSyntaxError';
+        this.stack = (new Error()).stack;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</main>
+
+
+<!-- 
+<footer class="footer-container text-center pt-5">
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Apr 21 2020 00:53:12 GMT-0400 (Eastern Daylight Time)
+</footer>
+-->
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+
+  <script src="http://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+</body>
+</html>
