@@ -1,0 +1,81 @@
+/** Style sheet for ModernTable Library **/
+
+.align-text-right {
+    text-align: right;
+}
+
+.align-text-left {
+    text-align: left;
+}
+
+.align-text-center {
+    text-align: center;
+}
+
+
+.table-sticky>thead>tr>th,
+.table-sticky>thead>tr>td {
+	/* background: #009688; */
+	background:white;
+	/* color: #fff; */
+	top: 0px;
+	position: sticky;
+}
+.table-height {
+    /* height: 320px; */
+    height: 75vh;
+	display: block;
+	/* overflow: scroll; */
+	overflow-y: auto;
+	width: 100%;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table caption {
+	caption-side: top;
+	text-align: center;
+	font-size: larger;
+	font-weight: bold;
+	color: black;
+}
+.table-bordered>thead>tr>th,
+.table-bordered>tbody>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>td {
+    border: 1px solid #ddd;
+    background-clip: padding-box;
+}
+
+.table-hover tbody tr:hover td {
+    background: darkgray;
+}
+
+.table-error{
+	display: block;
+}
+
+.table-error h1 {
+	font-size: larger;
+	font-weight: bold;
+}
+
+.table-error h2 {
+	font-size: medium;
+	font-style: italic;
+	padding-bottom: 15px;
+}
+
+.table-error .table-error-details{
+	/* display: inline-block; */
+	display: block;
+	margin-left: 1.5rem;
+}
+/* .table-error {
+	white-space: pre-wrap;
+	display: block;
+	text-align: left;
+} */

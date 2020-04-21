@@ -1,0 +1,47 @@
+{
+    "plugins": [ "plugins/markdown" ],
+    "markdown": {
+      "parser"   : "gfm",
+      "hardwrap" : true,
+      "idIdHeadings": true
+    },
+    "recurseDepth": 10,
+    "source": {
+        "include": [
+            "./src/"
+        ],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_",
+        "exclude": [
+            ".git",
+            ".vscode",
+            ".gitignore"
+        ]
+    },   
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "default": {
+            "outputSourceFiles": true            
+        },
+        "applicationName": "ModernTable Docs",
+        "meta": {
+            "title": "ModernTable Docs"
+        }
+    },
+
+    "opts": {
+        "access": "all",
+        "encoding": "utf8",
+        "eol": "LF",
+        "template": "./jsdoc-template/",
+        "destination": "./docs/",
+        "recurse": true,
+        "verbose": true,
+        "readme": "README.md"
+      }
+}
