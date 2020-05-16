@@ -79,3 +79,7 @@ table caption {
 	display: block;
 	text-align: left;
 } */
+
+.capitalize { 
+    text-transform: capitalize; 
+}
