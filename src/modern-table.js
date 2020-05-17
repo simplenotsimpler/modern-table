@@ -54,6 +54,7 @@ class ModernTable {
             tableClasses = '',
             tableCaption = '',
             tableFooter = '',
+            enableStickyHeader = true,
             enableSearch = true,
             searchClasses = '',
             colConfig = {}
@@ -66,6 +67,7 @@ class ModernTable {
         this.tableClasses = tableClasses;
         this.tableCaption = tableCaption;
         this.tableFooter = tableFooter;
+        this.enableStickyHeader = enableStickyHeader;
         this.enableSearch = enableSearch;
         this.searchClasses = searchClasses;
         //because using async functions with fetching data, this is a globabl variable rather than being passed
@@ -134,22 +136,36 @@ class ModernTable {
 
         const table = document.createElement('table');
 
-        //note: order is critical. table body must be rendered FIRST !!!
+        // note: order is critical. table body must be rendered FIRST !!!
         // otherwise everything is rendered in the head
         this._renderTableBody(table, tableData);
         this._renderTableHead(table, tableData);
 
+        if (this.tableClasses) {
+            table.className = this.tableClasses;
+        }
+
         if (this.tableCaption) {
             table.createCaption().innerText = this.tableCaption;
+            // adding mt-caption to table colors the table text when try override 
+            // and does not color the caption itself
+            // so need this class only on the caption (makes sense)
+            // table.classList.add('mt-caption');
+            table.caption.classList.add('mt-caption');
         }
 
         if (this.tableFooter) {
             table.createTFoot().innerText = this.tableFooter;
         }
 
-        table.className = this.tableClasses;
+        // add class to table so retains border on table header when have sticky header
+        table.classList.add('mt-table');
 
         table.id = this.tableID;
+
+        //add class to container so fixes table overflow
+        this.tableContainer.classList.add('mt-table-height');
+
 
         //add table almost last
         this.tableContainer.insertAdjacentElement('afterbegin', table);
@@ -331,7 +347,13 @@ class ModernTable {
             // https://css-tricks.com/almanac/properties/t/text-transform/
             // https://codepen.io/mariemosley/pen/0f4293fce0d14aafc3818c950ab0ded3
             // best practice is to use classList.add
-            tableTH.classList.add('capitalize');
+            tableTH.classList.add('mt-col-header-capitalize');
+
+
+            if (this.enableStickyHeader) {
+                tableTH.classList.add('mt-header-sticky');
+                tableTH.classList.add('mt-thead-style');
+            }
 
             alignmentClass = `align-text-${alignment}`;
             tableTH.classList.add(alignmentClass);
