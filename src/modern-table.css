@@ -13,45 +13,58 @@
 }
 
 
-.table-sticky>thead>tr>th,
-.table-sticky>thead>tr>td {
-	/* background: #009688; */
-	background:white;
-	/* color: #fff; */
+/* 
+	Need the border-collapse: separate so that can continue to see borders in table head when have sticky header.
+	Solution from:
+	https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element
+	answered Nov 30 '18 at 14:25
+	blackheart
+*/
+.mt-table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.mt-header-sticky {
 	top: 0px;
 	position: sticky;
 }
-.table-height {
-    /* height: 320px; */
+
+
+/* 
+	Color can be inherited. Useful if use BS4 class such as table-dark. 
+	However, background-ground color is not inheritable and must be explicitly set;
+*/
+.mt-thead-style {
+	color: black;
+	background-color: white;	
+}
+
+
+.mt-col-header-capitalize { 
+    text-transform: capitalize; 
+}
+
+.mt-table-height {
     height: 75vh;
 	display: block;
-	/* overflow: scroll; */
 	overflow-y: auto;
 	width: 100%;
 }
 
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
 
-table caption {
+/* 
+	Default Bootstrap 4 > caption-side: bottom. 
+	Set this explicitly to ensure caption at the top.
+	Style so looks more like a title for table.
+*/
+
+.mt-caption {
 	caption-side: top;
 	text-align: center;
 	font-size: larger;
 	font-weight: bold;
 	color: black;
-}
-.table-bordered>thead>tr>th,
-.table-bordered>tbody>tr>th,
-.table-bordered>thead>tr>td,
-.table-bordered>tbody>tr>td {
-    border: 1px solid #ddd;
-    background-clip: padding-box;
-}
-
-.table-hover tbody tr:hover td {
-    background: darkgray;
 }
 
 .table-error{
@@ -70,16 +83,6 @@ table caption {
 }
 
 .table-error .table-error-details{
-	/* display: inline-block; */
 	display: block;
 	margin-left: 1.5rem;
-}
-/* .table-error {
-	white-space: pre-wrap;
-	display: block;
-	text-align: left;
-} */
-
-.capitalize { 
-    text-transform: capitalize; 
 }
