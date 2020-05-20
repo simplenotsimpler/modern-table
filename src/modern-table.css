@@ -1,4 +1,16 @@
-/** Style sheet for ModernTable Library **/
+/**
+ * Styelsheet for:
+ * ModernTable Library
+ * Library for displaying a data table from a JSON source.
+ * @author SimpleNotSimpler
+ * @version 1.0.4
+ * @license MIT
+ *                                                                                                
+ * @requires modern-table.css {@link modern-table.css}
+ * @requires format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
+ * @requires Moment.js {@link https://momentjs.com/}
+ * 
+ **/
 
 .align-text-right {
     text-align: right;
@@ -33,7 +45,7 @@
 
 /* 
 	Color can be inherited. Useful if use BS4 class such as table-dark. 
-	However, background-ground color is not inheritable and must be explicitly set;
+	However, table header background-ground color is not inheritable and must be explicitly set;
 */
 .mt-thead-style {
 	color: black;

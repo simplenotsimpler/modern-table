@@ -2,7 +2,7 @@
  * ModernTable Library
  * Library for displaying a data table from a JSON source.
  * @author SimpleNotSimpler
- * @version 1.0.0
+ * @version 1.0.4
  * @license MIT
  *                                                                                                
  * @requires modern-table.css {@link modern-table.css}
