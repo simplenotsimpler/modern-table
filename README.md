@@ -27,10 +27,10 @@ __*WARNING!!!!*__ Pre-release software.
 
 ## CDN:
 * CSS:  
-`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.0/src/modern-table.css">`
+`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.4/src/modern-table.css">`
 
 * JS:  
-`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.0/src/modern-table.js"></script>`
+`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.4/src/modern-table.js"></script>`
 
 ## Example
 **HTML:**
