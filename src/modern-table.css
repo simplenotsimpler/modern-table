@@ -3,14 +3,17 @@
  * ModernTable Library
  * Library for displaying a data table from a JSON source.
  * @author SimpleNotSimpler
- * @version 1.0.4
+ * @version 1.0.5
  * @license MIT
  *                                                                                                
- * @requires modern-table.css {@link modern-table.css}
- * @requires format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
- * @requires Moment.js {@link https://momentjs.com/}
- * 
- **/
+ */
+
+ /**
+ * =============================================
+ * =            CELL STYLES                    =
+ * =============================================
+ *
+ */
 
 .align-text-right {
     text-align: right;
@@ -24,14 +27,27 @@
     text-align: center;
 }
 
+.mt-col-header-capitalize { 
+    text-transform: capitalize; 
+}
 
-/* 
-	Need the border-collapse: separate so that can continue to see borders in table head when have sticky header.
-	Solution from:
-	https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element
-	answered Nov 30 '18 at 14:25
-	blackheart
-*/
+/*=====  End of CELL STYLES ======*/
+
+
+
+/**
+ * =============================================
+ * =            STICKY TABLE HEADER            =
+ * =============================================
+ *
+ * Need the border-collapse: separate so that can continue to see borders in table head when have sticky header.
+ * Solution from:
+ * https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element
+ * answered Nov 30 '18 at 14:25
+ * blackheart
+ *
+ */
+
 .mt-table {
 	border-collapse: separate;
 	border-spacing: 0;
@@ -42,20 +58,26 @@
 	position: sticky;
 }
 
+/**
+ *
+ * Because sticky header makes the header background transparent, explicitly set this. 
+ * Color can be inherited. Useful if use Bootstrap 4 class such as table-dark. 
+ * However, table header background-ground color is not inheritable and must be explicitly set.
+ * 
+ */
 
-/* 
-	Color can be inherited. Useful if use BS4 class such as table-dark. 
-	However, table header background-ground color is not inheritable and must be explicitly set;
-*/
-.mt-thead-style {
+ .mt-thead-style {
 	color: black;
 	background-color: white;	
 }
 
+/*=====  End of STICKY TABLE HEADER  ======*/
 
-.mt-col-header-capitalize { 
-    text-transform: capitalize; 
-}
+/**
+ * =============================================
+ * =            TABLE CONTAINER                =
+ * =============================================
+ */
 
 .mt-table-height {
     height: 75vh;
@@ -64,12 +86,18 @@
 	width: 100%;
 }
 
+/*=====  End of Section TABLE CONTAINER  ======*/
 
-/* 
-	Default Bootstrap 4 > caption-side: bottom. 
-	Set this explicitly to ensure caption at the top.
-	Style so looks more like a title for table.
-*/
+
+/**
+ * =============================================
+ * =            TABLE CAPTION                  =
+ * =============================================
+ *
+ *	Default Bootstrap 4 > caption-side: bottom. 
+ *	Set this explicitly to ensure caption at the top.
+ *	Style so looks more like a title for table.
+ */
 
 .mt-caption {
 	caption-side: top;
@@ -78,6 +106,16 @@
 	font-weight: bold;
 	color: black;
 }
+
+
+/*=====  End of TABLE CAPTION  ======*/
+
+/**
+ * =============================================
+ * =            TABLE ERROR                  =
+ * =============================================
+ *
+ */
 
 .table-error{
 	display: block;
@@ -98,3 +136,6 @@
 	display: block;
 	margin-left: 1.5rem;
 }
+
+
+/*=====  End of TABLE ERROR  ======*/

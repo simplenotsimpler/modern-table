@@ -45,11 +45,13 @@
         <h2><span class="attribs"><span class="type-signature"></span></span>ModernTable<span class="signature">(tableContainerID, tableID, dataURL, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>A simple ES6 class targeting modern browsers that dynamically creates a data table from a JSON source. Displays nicely within Bootstrap Card.</p>
-<ul>NOTES:
+<ul><strong>RECOMMENDED</strong>:
+<li>Number formatting: <a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number library</a></li>
+<li>Date formatting: <a href="https://momentjs.com/">Moment.js</a></li>
+</ul> 
+<ul><strong>NOTES:</strong>
    <li>Underscores (_) used to indicate private (local) methods that should not be used outside of the class.</li>
    <li>tableFooter can affect the width of the first column.</li>
-   <li>Date format requires <a href="https://momentjs.com/">Moment.js</a>.
-   <li>Number formats depend on <a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number</a> library.
 </ul></div>
         
     
@@ -799,7 +801,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line16">line 16</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -905,7 +907,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line86">line 86</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -945,7 +947,7 @@
     
 
     
-    <p class="summary"><p>Provides a method for canceling a search</p></p>
+    <p class="summary"><p>Provides a method for canceling a search.</p></p>
     
 
 
@@ -1040,7 +1042,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line193">line 193</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -1080,7 +1082,7 @@
     
 
     
-    <p class="summary"><p>Fetches data and renders table if data was successfully fetched</p></p>
+    <p class="summary"><p>Fetches data and renders table if data was successfully fetched.</p></p>
     
 
 
@@ -1175,7 +1177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line99">line 99</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -1355,7 +1357,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line209">line 209</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line234">line 234</a>
     </li></ul></dd>
     
 
@@ -1394,6 +1396,14 @@
     <h4 class="name" id="_formatCellValue"><span class="type-signature">(private) </span>_formatCellValue<span class="signature">(cellValue, configKey)</span><span class="type-signature"></span></h4>
     
 
+    
+    <p class="summary"><p>Formats table cells with number and/or date formatting.</p>
+<p>Notes:</p>
+<ul>
+<li>Recommended to use <a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number library</a> or  <a href="https://momentjs.com/">Moment.js</a> for formatting.</li>
+<li>However, other formatting libraries can be used if desired.</li>
+<li>Gracefully fails to no number/date formatting if libraries are not loaded or the format option was not specified in the colConfig.</li>
+</ul></p>
     
 
 
@@ -1511,7 +1521,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line392">line 392</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line433">line 433</a>
     </li></ul></dd>
     
 
@@ -1561,6 +1571,8 @@
     
 
     
+    <p class="summary"><p>Processes fetched data into an HTML table.</p></p>
+    
 
 
 
@@ -1654,7 +1666,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line133">line 133</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -1694,6 +1706,8 @@
     
 
     
+    <p class="summary"><p>Process fetched data into a table body.</p></p>
+    
 
 
 
@@ -1810,7 +1824,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line241">line 241</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -1849,6 +1863,8 @@
     <h4 class="name" id="_renderTableHead"><span class="type-signature">(private) </span>_renderTableHead<span class="signature">(elementTable, tableData)</span><span class="type-signature"></span></h4>
     
 
+    
+    <p class="summary"><p>Creates table row from fetched data's keys.</p></p>
     
 
 
@@ -1966,7 +1982,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line291">line 291</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line317">line 317</a>
     </li></ul></dd>
     
 
@@ -2005,6 +2021,8 @@
     <h4 class="name" id="_renderTableSearch"><span class="type-signature">(private) </span>_renderTableSearch<span class="signature">(elementTable)</span><span class="type-signature"></span></h4>
     
 
+    
+    <p class="summary"><p>Creates a search as you type search element.</p></p>
     
 
 
@@ -2099,7 +2117,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line168">line 168</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -2138,6 +2156,8 @@
     <h4 class="name" id="_setAlignment"><span class="type-signature">(private) </span>_setAlignment<span class="signature">(configKey)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
+    
+    <p class="summary"><p>Sets the alignment for a column from the alignment colConfig.</p></p>
     
 
 
@@ -2232,7 +2252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line372">line 372</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line405">line 405</a>
     </li></ul></dd>
     
 
@@ -2294,6 +2314,8 @@
     
 
     
+    <p class="summary"><p>Sets the column title from colTitle configuration if explicitly set.</p></p>
+    
 
 
 
@@ -2387,7 +2409,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line351">line 351</a>
+        <a href="modern-table.js.html">modern-table.js</a>, <a href="modern-table.js.html#line383">line 383</a>
     </li></ul></dd>
     
 
@@ -2457,7 +2479,7 @@
 
 <!-- 
 <footer class="footer-container text-center pt-5">
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Apr 21 2020 00:53:12 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon May 25 2020 21:19:00 GMT-0400 (Eastern Daylight Time)
 </footer>
 -->
 

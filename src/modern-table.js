@@ -2,12 +2,14 @@
  * ModernTable Library
  * Library for displaying a data table from a JSON source.
  * @author SimpleNotSimpler
- * @version 1.0.4
+ * @version 1.0.5
  * @license MIT
  *                                                                                                
  * @requires modern-table.css {@link modern-table.css}
- * @requires format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
- * @requires Moment.js {@link https://momentjs.com/}
+ * 
+ * Recommended (for number/date formatting):
+ * Number formatting: format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
+ * Date formatting: Moment.js {@link https://momentjs.com/}
  * 
  */
 
@@ -17,12 +19,17 @@
  *
  * @class ModernTable
  * @classdesc A simple ES6 class targeting modern browsers that dynamically creates a data table from a JSON source. Displays nicely within Bootstrap Card.
- * <ul>NOTES:
+ * 
+ * <ul><strong>RECOMMENDED</strong>:
+ * <li>Number formatting: <a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number library</a></li>
+ * <li>Date formatting: <a href="https://momentjs.com/">Moment.js</a></li>
+ * </ul> 
+ *
+ * <ul><strong>NOTES:</strong>
  *    <li>Underscores (_) used to indicate private (local) methods that should not be used outside of the class.</li>
  *    <li>tableFooter can affect the width of the first column.</li>
- *    <li>Date format requires <a href="https://momentjs.com/">Moment.js</a>.
- *    <li>Number formats depend on <a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number</a> library.
  * </ul>
+ * 
  * @param {string} tableContainerID The ID of the element that contains the table.
  * @param {string} tableID The ID we want to assign to the table.
  * @param {string} dataURL URL used to fetch JSON data to build table.
@@ -91,7 +98,7 @@ class ModernTable {
     }
 
     /**
-     * @summary Fetches data and renders table if data was successfully fetched
+     * @summary Fetches data and renders table if data was successfully fetched.
      * @private
      * @param {string} urlToBeFetched
      * @returns {Object[]} responseJSON
@@ -127,6 +134,7 @@ class ModernTable {
     }
 
     /**
+     * @summary Processes fetched data into an HTML table.
      * @private
      * @param {Object[]} tableData
      * @memberof ModernTable
@@ -177,6 +185,7 @@ class ModernTable {
 
     /**
      *
+     * @summary Creates a search as you type search element.
      * @private
      * @param {Object} elementTable
      * @memberof ModernTable
@@ -201,7 +210,7 @@ class ModernTable {
     }
 
     /**
-     * @summary Provides a method for canceling a search
+     * @summary Provides a method for canceling a search.
      * @private
      * @param {event} e
      * @memberof ModernTable
@@ -248,7 +257,7 @@ class ModernTable {
     }
 
     /**
-     *
+     * @summary Process fetched data into a table body.
      * @private
      * @param {string} elementTable
      * @param {Object} tableData
@@ -299,6 +308,7 @@ class ModernTable {
 
     /**
      *
+     * @summary Creates table row from fetched data's keys. 
      * @private
      * @param {string} elementTable
      * @param {Object[]} tableData
@@ -364,7 +374,7 @@ class ModernTable {
     }
 
     /**
-     *
+     * @summary Sets the column title from colTitle configuration if explicitly set.
      * @private
      * @param {string} configKey
      * @returns {string} colTitle
@@ -386,6 +396,7 @@ class ModernTable {
 
 
     /**
+     * @summary Sets the alignment for a column from the alignment colConfig.
      * @private
      * @param {string} configKey
      * @returns {string} alignment
@@ -404,7 +415,15 @@ class ModernTable {
 
         return alignment;
     }
+    
     /**
+     * 
+     * @summary Formats table cells with number and/or date formatting.
+     * 
+     * Notes:
+     * - Recommended to use [format-intl-number library](https://github.com/simplenotsimpler/format-intl-number) or  [Moment.js](https://momentjs.com/) for formatting. 
+     * - However, other formatting libraries can be used if desired. 
+     * - Gracefully fails to no number/date formatting if libraries are not loaded or the format option was not specified in the colConfig.
      * @private
      * @param {*} cellValue
      * @param {string} configKey
@@ -414,24 +433,29 @@ class ModernTable {
     _formatCellValue(cellValue, configKey) {
 
         let currentColConfig = this.colConfig[configKey];
-        let currentColFormat = currentColConfig['format'];
 
+        //check that format was set in options
+        if ('format' in currentColConfig) {
+            
+            let currentColFormat = currentColConfig['format'];
+            
+            // make sure the formatIntlNumber library loaded            
+            if (currentColFormat !== 'date-us' && typeof formatIntlNumber !=='undefined' ) {
+                if ('numDecimals' in currentColConfig) {
+                    let numDecimals = currentColConfig['numDecimals'];
 
-        if (currentColFormat !== 'date-us') {
-            if ('numDecimals' in currentColConfig) {
-                let numDecimals = currentColConfig['numDecimals'];
+                    cellValue = formatIntlNumber(cellValue, currentColFormat, numDecimals);
+                } else {
+                    cellValue = formatIntlNumber(cellValue, currentColFormat);
+                }
+            } else if (currentColFormat === 'date-us' && typeof moment !=='undefined' ) {
+                let dateFrom = currentColConfig['dateFrom'];
+                let dateTo = currentColConfig['dateTo'];
 
-                cellValue = formatIntlNumber(cellValue, currentColFormat, numDecimals);
-            } else {
-                cellValue = formatIntlNumber(cellValue, currentColFormat);
+                //strict mode recommended per https://momentjs.com/guides/#/parsing/strict-mode/
+                cellValue = moment(cellValue, dateFrom, true).format(dateTo);
+
             }
-        } else if (currentColFormat === 'date-us') {
-            let dateFrom = currentColConfig['dateFrom'];
-            let dateTo = currentColConfig['dateTo'];
-
-            //strict mode recommended per https://momentjs.com/guides/#/parsing/strict-mode/
-            cellValue = moment(cellValue, dateFrom, true).format(dateTo);
-
         }
 
         return cellValue;
@@ -441,9 +465,8 @@ class ModernTable {
 }
 
 /**
- *
- * @class TableErrorHandler 
  * @summary Processes an error into a user friendly version displayed in the gui. 
+ * @class TableErrorHandler  * 
  * @param {Object} error
  */
 class TableErrorHandler {
@@ -482,9 +505,8 @@ class TableErrorHandler {
 }
 
 /**
- *
- * @class HTTPError
  * @summary Custom errror for processing HTTP errors.
+ * @class HTTPError 
  * @extends {Error}
  */
 class HTTPError extends Error {
@@ -497,8 +519,8 @@ class HTTPError extends Error {
 
 /**
  *
- * @class JSONSyntaxError
  * @summary Custom error for JSON Syntax errors. Passes the stack trace.
+ * @class JSONSyntaxError 
  * @extends {SyntaxError}
  */
 class JSONSyntaxError extends SyntaxError {
