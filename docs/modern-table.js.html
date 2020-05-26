@@ -44,12 +44,14 @@
  * ModernTable Library
  * Library for displaying a data table from a JSON source.
  * @author SimpleNotSimpler
- * @version 1.0.0
+ * @version 1.0.5
  * @license MIT
  *                                                                                                
  * @requires modern-table.css {@link modern-table.css}
- * @requires format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
- * @requires Moment.js {@link https://momentjs.com/}
+ * 
+ * Recommended (for number/date formatting):
+ * Number formatting: format-int-number library {@link https://github.com/simplenotsimpler/format-intl-number}
+ * Date formatting: Moment.js {@link https://momentjs.com/}
  * 
  */
 
@@ -59,12 +61,17 @@
  *
  * @class ModernTable
  * @classdesc A simple ES6 class targeting modern browsers that dynamically creates a data table from a JSON source. Displays nicely within Bootstrap Card.
- * &lt;ul>NOTES:
+ * 
+ * &lt;ul>&lt;strong>RECOMMENDED&lt;/strong>:
+ * &lt;li>Number formatting: &lt;a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number library&lt;/a>&lt;/li>
+ * &lt;li>Date formatting: &lt;a href="https://momentjs.com/">Moment.js&lt;/a>&lt;/li>
+ * &lt;/ul> 
+ *
+ * &lt;ul>&lt;strong>NOTES:&lt;/strong>
  *    &lt;li>Underscores (_) used to indicate private (local) methods that should not be used outside of the class.&lt;/li>
  *    &lt;li>tableFooter can affect the width of the first column.&lt;/li>
- *    &lt;li>Date format requires &lt;a href="https://momentjs.com/">Moment.js&lt;/a>.
- *    &lt;li>Number formats depend on &lt;a href="https://github.com/simplenotsimpler/format-intl-number">format-intl-number&lt;/a> library.
  * &lt;/ul>
+ * 
  * @param {string} tableContainerID The ID of the element that contains the table.
  * @param {string} tableID The ID we want to assign to the table.
  * @param {string} dataURL URL used to fetch JSON data to build table.
@@ -96,6 +103,7 @@ class ModernTable {
             tableClasses = '',
             tableCaption = '',
             tableFooter = '',
+            enableStickyHeader = true,
             enableSearch = true,
             searchClasses = '',
             colConfig = {}
@@ -108,6 +116,7 @@ class ModernTable {
         this.tableClasses = tableClasses;
         this.tableCaption = tableCaption;
         this.tableFooter = tableFooter;
+        this.enableStickyHeader = enableStickyHeader;
         this.enableSearch = enableSearch;
         this.searchClasses = searchClasses;
         //because using async functions with fetching data, this is a globabl variable rather than being passed
@@ -131,7 +140,7 @@ class ModernTable {
     }
 
     /**
-     * @summary Fetches data and renders table if data was successfully fetched
+     * @summary Fetches data and renders table if data was successfully fetched.
      * @private
      * @param {string} urlToBeFetched
      * @returns {Object[]} responseJSON
@@ -167,6 +176,7 @@ class ModernTable {
     }
 
     /**
+     * @summary Processes fetched data into an HTML table.
      * @private
      * @param {Object[]} tableData
      * @memberof ModernTable
@@ -176,22 +186,36 @@ class ModernTable {
 
         const table = document.createElement('table');
 
-        //note: order is critical. table body must be rendered FIRST !!!
+        // note: order is critical. table body must be rendered FIRST !!!
         // otherwise everything is rendered in the head
         this._renderTableBody(table, tableData);
         this._renderTableHead(table, tableData);
 
+        if (this.tableClasses) {
+            table.className = this.tableClasses;
+        }
+
         if (this.tableCaption) {
             table.createCaption().innerText = this.tableCaption;
+            // adding mt-caption to table colors the table text when try override 
+            // and does not color the caption itself
+            // so need this class only on the caption (makes sense)
+            // table.classList.add('mt-caption');
+            table.caption.classList.add('mt-caption');
         }
 
         if (this.tableFooter) {
             table.createTFoot().innerText = this.tableFooter;
         }
 
-        table.className = this.tableClasses;
+        // add class to table so retains border on table header when have sticky header
+        table.classList.add('mt-table');
 
         table.id = this.tableID;
+
+        //add class to container so fixes table overflow
+        this.tableContainer.classList.add('mt-table-height');
+
 
         //add table almost last
         this.tableContainer.insertAdjacentElement('afterbegin', table);
@@ -203,6 +227,7 @@ class ModernTable {
 
     /**
      *
+     * @summary Creates a search as you type search element.
      * @private
      * @param {Object} elementTable
      * @memberof ModernTable
@@ -227,7 +252,7 @@ class ModernTable {
     }
 
     /**
-     * @summary Provides a method for canceling a search
+     * @summary Provides a method for canceling a search.
      * @private
      * @param {event} e
      * @memberof ModernTable
@@ -274,7 +299,7 @@ class ModernTable {
     }
 
     /**
-     *
+     * @summary Process fetched data into a table body.
      * @private
      * @param {string} elementTable
      * @param {Object} tableData
@@ -325,6 +350,7 @@ class ModernTable {
 
     /**
      *
+     * @summary Creates table row from fetched data's keys. 
      * @private
      * @param {string} elementTable
      * @param {Object[]} tableData
@@ -373,7 +399,13 @@ class ModernTable {
             // https://css-tricks.com/almanac/properties/t/text-transform/
             // https://codepen.io/mariemosley/pen/0f4293fce0d14aafc3818c950ab0ded3
             // best practice is to use classList.add
-            tableTH.classList.add('capitalize');
+            tableTH.classList.add('mt-col-header-capitalize');
+
+
+            if (this.enableStickyHeader) {
+                tableTH.classList.add('mt-header-sticky');
+                tableTH.classList.add('mt-thead-style');
+            }
 
             alignmentClass = `align-text-${alignment}`;
             tableTH.classList.add(alignmentClass);
@@ -384,7 +416,7 @@ class ModernTable {
     }
 
     /**
-     *
+     * @summary Sets the column title from colTitle configuration if explicitly set.
      * @private
      * @param {string} configKey
      * @returns {string} colTitle
@@ -406,6 +438,7 @@ class ModernTable {
 
 
     /**
+     * @summary Sets the alignment for a column from the alignment colConfig.
      * @private
      * @param {string} configKey
      * @returns {string} alignment
@@ -424,7 +457,15 @@ class ModernTable {
 
         return alignment;
     }
+    
     /**
+     * 
+     * @summary Formats table cells with number and/or date formatting.
+     * 
+     * Notes:
+     * - Recommended to use [format-intl-number library](https://github.com/simplenotsimpler/format-intl-number) or  [Moment.js](https://momentjs.com/) for formatting. 
+     * - However, other formatting libraries can be used if desired. 
+     * - Gracefully fails to no number/date formatting if libraries are not loaded or the format option was not specified in the colConfig.
      * @private
      * @param {*} cellValue
      * @param {string} configKey
@@ -434,24 +475,29 @@ class ModernTable {
     _formatCellValue(cellValue, configKey) {
 
         let currentColConfig = this.colConfig[configKey];
-        let currentColFormat = currentColConfig['format'];
 
+        //check that format was set in options
+        if ('format' in currentColConfig) {
+            
+            let currentColFormat = currentColConfig['format'];
+            
+            // make sure the formatIntlNumber library loaded            
+            if (currentColFormat !== 'date-us' &amp;&amp; typeof formatIntlNumber !=='undefined' ) {
+                if ('numDecimals' in currentColConfig) {
+                    let numDecimals = currentColConfig['numDecimals'];
 
-        if (currentColFormat !== 'date-us') {
-            if ('numDecimals' in currentColConfig) {
-                let numDecimals = currentColConfig['numDecimals'];
+                    cellValue = formatIntlNumber(cellValue, currentColFormat, numDecimals);
+                } else {
+                    cellValue = formatIntlNumber(cellValue, currentColFormat);
+                }
+            } else if (currentColFormat === 'date-us' &amp;&amp; typeof moment !=='undefined' ) {
+                let dateFrom = currentColConfig['dateFrom'];
+                let dateTo = currentColConfig['dateTo'];
 
-                cellValue = formatIntlNumber(cellValue, currentColFormat, numDecimals);
-            } else {
-                cellValue = formatIntlNumber(cellValue, currentColFormat);
+                //strict mode recommended per https://momentjs.com/guides/#/parsing/strict-mode/
+                cellValue = moment(cellValue, dateFrom, true).format(dateTo);
+
             }
-        } else if (currentColFormat === 'date-us') {
-            let dateFrom = currentColConfig['dateFrom'];
-            let dateTo = currentColConfig['dateTo'];
-
-            //strict mode recommended per https://momentjs.com/guides/#/parsing/strict-mode/
-            cellValue = moment(cellValue, dateFrom, true).format(dateTo);
-
         }
 
         return cellValue;
@@ -461,9 +507,8 @@ class ModernTable {
 }
 
 /**
- *
- * @class TableErrorHandler 
  * @summary Processes an error into a user friendly version displayed in the gui. 
+ * @class TableErrorHandler  * 
  * @param {Object} error
  */
 class TableErrorHandler {
@@ -502,9 +547,8 @@ class TableErrorHandler {
 }
 
 /**
- *
- * @class HTTPError
  * @summary Custom errror for processing HTTP errors.
+ * @class HTTPError 
  * @extends {Error}
  */
 class HTTPError extends Error {
@@ -517,8 +561,8 @@ class HTTPError extends Error {
 
 /**
  *
- * @class JSONSyntaxError
  * @summary Custom error for JSON Syntax errors. Passes the stack trace.
+ * @class JSONSyntaxError 
  * @extends {SyntaxError}
  */
 class JSONSyntaxError extends SyntaxError {
@@ -540,7 +584,7 @@ class JSONSyntaxError extends SyntaxError {
 
 <!-- 
 <footer class="footer-container text-center pt-5">
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Apr 21 2020 00:53:12 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon May 25 2020 21:19:00 GMT-0400 (Eastern Daylight Time)
 </footer>
 -->
 
