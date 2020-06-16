@@ -27,10 +27,10 @@ A simple modern ES6 library that fetches JSON data and displays it in a table. U
 
 ## CDN:
 * CSS:  
-`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.5/src/modern-table.css">`
+`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.6/src/modern-table.css">`
 
 * JS:  
-`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.5/src/modern-table.js"></script>`
+`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.6/src/modern-table.js"></script>`
 
 ## Example
 **HTML:**
