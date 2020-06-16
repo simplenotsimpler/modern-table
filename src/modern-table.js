@@ -2,7 +2,7 @@
  * ModernTable Library
  * Library for displaying a data table from a JSON source.
  * @author SimpleNotSimpler
- * @version 1.0.5
+ * @version 1.0.6
  * @license MIT
  *                                                                                                
  * @requires modern-table.css {@link modern-table.css}
@@ -195,7 +195,7 @@ class ModernTable {
 
         tableSearchBox.className = this.searchClasses;
         tableSearchBox.setAttribute('type', 'search');
-        tableSearchBox.setAttribute('placeholder', 'Search');
+        tableSearchBox.setAttribute('placeholder', 'Search table');
         tableSearchBox.setAttribute('aria-label', 'Search');
         tableSearchBox.setAttribute('size', '50');
 
