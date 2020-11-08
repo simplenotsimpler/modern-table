@@ -1,5 +1,5 @@
 # ModernTable [![GitHub version](https://badge.fury.io/gh/simplenotsimpler%2Fmodern-table.svg)](https://badge.fury.io/gh/simplenotsimpler%2Fmodern-table) [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-A simple modern ES6 library that fetches JSON data and displays it in a table. Unlike most data tables, this displays nicely within a Bootstrap 4 Card. 
+Simple modern JavaScript ES6 library that fetches JSON data into an HTML table which displays nicely within a Bootstrap 4 Card.
 
 # Notes:
 * __*Only*__ targets **modern** browsers. 
