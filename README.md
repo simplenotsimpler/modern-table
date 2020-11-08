@@ -4,7 +4,8 @@ A simple modern ES6 library that fetches JSON data and displays it in a table. U
 # Notes:
 * __*Only*__ targets **modern** browsers. 
 * To help [Microsoft phase out IE11](https://techcommunity.microsoft.com/t5/microsoft-365-blog/microsoft-365-apps-say-farewell-to-internet-explorer-11-and/ba-p/1591666) and in anticipation of [Bootstrap 5 dropping IE support](https://blog.getbootstrap.com/2020/06/16/bootstrap-5-alpha/), IE is not supported.
-* Tested with Bootstrap 4.4.1 CSS framework.
+* Compatible with Bootstrap 4.4.1 and higher.
+* Specifically tested with Bootstrap 4.4.1 and 4.5.3.
 * This has __*NOT*__ been tested with other CSS frameworks.
 * If number or date formatting are specified in the configuration, but the proper library does not load, this gracefully fails to no formatting.
 * Strongly recommended to use ISO 8601 date formats in your source data and configuration. Then use the UI for localization.
