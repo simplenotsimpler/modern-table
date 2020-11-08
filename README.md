@@ -92,4 +92,4 @@ For the most part, the table is stylistically agnostic with a few exceptions whi
 For details on specific classes see [modern-table.css](/src/modern-table.css).
 
 # License
-ModernTable is [MIT licensed](./LICENSE).
+This project is [MIT licensed](./LICENSE).
