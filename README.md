@@ -28,10 +28,10 @@ Simple modern JavaScript ES6 library that fetches JSON data into an HTML table w
 
 ## CDN:
 * CSS:  
-`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.6/src/modern-table.css">`
+`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.7/src/modern-table.css">`
 
 * JS:  
-`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.6/src/modern-table.js"></script>`
+`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.7/src/modern-table.js"></script>`
 
 ## Example
 **HTML:**
