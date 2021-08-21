@@ -28,10 +28,10 @@ Simple modern JavaScript ES6 library that fetches JSON data into an HTML table w
 
 ## CDN:
 * CSS:  
-`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.7/src/modern-table.css">`
+`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.8/src/modern-table.css">`
 
 * JS:  
-`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.7/src/modern-table.js"></script>`
+`<script src="https://cdn.jsdelivr.net/gh/simplenotsimpler/modern-table@1.0.8/src/modern-table.js"></script>`
 
 ## Example
 **HTML:**
@@ -92,4 +92,4 @@ For the most part, the table is stylistically agnostic with a few exceptions whi
 For details on specific classes see [modern-table.css](/src/modern-table.css).
 
 # License
-This project is [MIT licensed](./LICENSE).
+This project is [MIT licensed](https://github.com/simplenotsimpler/modern-table/blob/main/LICENSE).
